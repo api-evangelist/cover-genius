@@ -1,0 +1,166 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cover Genius XCover API",
+    "version": "2.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "apikey": {
+        "key": "X-Api-Key",
+        "value": "{{apiKey}}",
+        "in": "header"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Offers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create offer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.xcover.com/x/partners/{{partnerCode}}/offers/",
+            "body": {
+              "type": "json",
+              "data": "{\n  \"request\": [],\n  \"quotePackage\": {\n    \"currency\": \"USD\",\n    \"customer_country\": \"US\",\n    \"customer_language\": \"en\"\n  }\n}"
+            }
+          },
+          "docs": "Creates one or more insurance offers (quotes) for a customer based on supplied context."
+        },
+        {
+          "info": {
+            "name": "Opt out of offer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.xcover.com/x/partners/{{partnerCode}}/offers/{{offerId}}/opt_out/"
+          },
+          "docs": "Records that a customer has declined a presented insurance offer."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Bookings",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Confirm offer (create booking)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.xcover.com/x/partners/{{partnerCode}}/offers/{{offerId}}/confirm/",
+            "body": {
+              "type": "json",
+              "data": "{\n  \"quotes\": [],\n  \"policyholder\": {\n    \"first_name\": \"\",\n    \"last_name\": \"\",\n    \"email\": \"\"\n  }\n}"
+            }
+          },
+          "docs": "Confirms selected quotes from an offer into a bound policy. Supports x-idempotency-key."
+        },
+        {
+          "info": {
+            "name": "Get booking",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.xcover.com/x/partners/{{partnerCode}}/bookings/{{bookingId}}/"
+          },
+          "docs": "Retrieves the details of a confirmed booking and its policies."
+        },
+        {
+          "info": {
+            "name": "Modify booking",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.xcover.com/x/partners/{{partnerCode}}/bookings/{{bookingId}}/",
+            "body": {
+              "type": "json",
+              "data": "{\n  \"quotes\": []\n}"
+            }
+          },
+          "docs": "Applies modifications directly to a confirmed booking."
+        },
+        {
+          "info": {
+            "name": "Quote booking modification",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.xcover.com/x/partners/{{partnerCode}}/bookings/{{bookingId}}/quote_for_update",
+            "body": {
+              "type": "json",
+              "data": "{\n  \"quotes\": []\n}"
+            }
+          },
+          "docs": "Previews the price impact of a modification, returning an update_id."
+        },
+        {
+          "info": {
+            "name": "Confirm booking modification",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.xcover.com/x/partners/{{partnerCode}}/bookings/{{bookingId}}/confirm_update/{{updateId}}/"
+          },
+          "docs": "Confirms a previously previewed booking modification by update_id."
+        },
+        {
+          "info": {
+            "name": "Cancel booking",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.xcover.com/x/partners/{{partnerCode}}/bookings/{{bookingId}}/cancel",
+            "body": {
+              "type": "json",
+              "data": "{\n  \"preview\": true\n}"
+            }
+          },
+          "docs": "Cancels a booking; preview true returns a cancellation_id and refund preview."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "XClaim",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a new claim",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.xclaim.xcover.com/partners/{{partnerCode}}/claims",
+            "body": {
+              "type": "json",
+              "data": "{\n  \"claimTypeId\": \"\",\n  \"bookingReference\": \"\",\n  \"quoteReference\": \"\",\n  \"language\": \"en\",\n  \"sectionFields\": []\n}"
+            }
+          },
+          "docs": "Files a new claim against a partner policy."
+        }
+      ]
+    }
+  ]
+}

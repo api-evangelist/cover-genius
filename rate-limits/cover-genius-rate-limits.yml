@@ -1,0 +1,56 @@
+specification: API Commons Rate Limits
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
+provider: Cover Genius
+providerId: cover-genius
+created: '2026-06-20'
+modified: '2026-06-20'
+reconciled: false
+tags:
+- Insurance
+- Insurtech
+- Embedded Insurance
+- Protection
+- Claims
+- Rate Limiting
+- Quotas
+- Throttling
+description: >-
+  The XCover API enforces per-second rate limits on partner requests. The
+  documented defaults are 50 requests/second for the Create Offer and Confirm
+  Offer endpoints and 20 requests/second shared across all other endpoints.
+  Testing API keys are restricted to 2 requests/second. Limits can be raised by
+  arrangement with a Cover Genius account manager. Exact throttle response codes
+  and rate-limit headers are not fully documented and are not reconciled here.
+notes: >-
+  Verify current per-endpoint limits, throttle status codes, and any rate-limit
+  response headers with Cover Genius partner support during reconciliation.
+sources:
+- https://partner-docs.covergenius.com/offers/api/rate-limits
+- https://partner-docs.covergenius.com/offers/api/reference
+responseCodes:
+  throttled: 429
+limits:
+- name: Create Offer / Confirm Offer
+  scope: account
+  metric: requests
+  limit: 50/second
+  notes: Applies to the create offer and confirm offer (booking) endpoints.
+- name: All Other Endpoints
+  scope: account
+  metric: requests
+  limit: 20/second
+  notes: Shared across all remaining XCover endpoints.
+- name: Testing API Keys
+  scope: account
+  metric: requests
+  limit: 2/second
+  notes: Lower limit applied to test/sandbox API keys operating in production.
+policies:
+- name: Limit Increases
+  description: Higher limits available by arrangement with a Cover Genius account manager / Client Solution Engineer.
+- name: Backoff Strategy
+  description: Clients should implement exponential backoff with jitter and honor any throttle responses.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

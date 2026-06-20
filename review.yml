@@ -1,0 +1,81 @@
+aid: cover-genius
+name: Cover Genius
+review:
+  question: Does Cover Genius expose a documented public WebSocket API?
+  answer: false
+  date: '2026-06-20'
+  reviewer: API Evangelist
+  asyncapiSpecCreated: false
+  asyncapiScopeNote: |
+    Cover Genius delivers asynchronous policy lifecycle notifications via
+    outbound HTTP POST webhook callbacks to a partner-configured Listener URL,
+    not via Server-Sent Events (SSE) or WebSocket. Per current API Evangelist
+    scope, only SSE and WebSocket streaming transports are modeled in AsyncAPI;
+    partner-registered HTTP webhook callbacks are not a streaming transport and
+    were not modeled as AsyncAPI. No AsyncAPI document was created.
+findings:
+  summary: |
+    Cover Genius does not publish a documented public WebSocket API. The XCover
+    distribution API (Offers, Bookings/Policies) and the XClaim claims API are
+    request/response REST over HTTPS. Asynchronous events - BOOKING_CREATED,
+    BOOKING_UPDATED, BOOKING_CANCELLED, and renewal events (RENEWAL_CREATED,
+    RENEWAL_NOTIFICATION, RENEWAL_DUE, RENEWAL_EXPIRED) - are delivered as
+    outbound HTTP POST webhook callbacks to a partner Listener URL, signed with
+    HMAC-SHA256 and retried up to three times on non-200 responses. There is no
+    WebSocket (ws:// or wss://) and no SSE streaming surface documented.
+  transports:
+    - protocol: REST
+      scheme: https
+      baseURL: https://api.xcover.com/x
+      documented: true
+    - protocol: REST
+      scheme: https
+      baseURL: https://api.xclaim.xcover.com
+      documented: true
+    - protocol: Webhook
+      scheme: https
+      note: Outbound HTTP POST callbacks to a partner-configured Listener URL, HMAC-SHA256 signed. Not WebSocket and not SSE.
+      documented: true
+    - protocol: WebSocket
+      scheme: wss
+      documented: false
+      note: No WebSocket endpoint is documented in the XCover or XClaim partner documentation as of the review date.
+  endpointsConfirmedRest:
+    - POST   https://api.xcover.com/x/partners/{partner_code}/offers/
+    - POST   https://api.xcover.com/x/partners/{partner_code}/offers/{offer_id}/opt_out/
+    - POST   https://api.xcover.com/x/partners/{partner_code}/offers/{offer_id}/confirm/
+    - GET    https://api.xcover.com/x/partners/{partner_code}/bookings/{booking_id}/
+    - PATCH  https://api.xcover.com/x/partners/{partner_code}/bookings/{booking_id}/
+    - PATCH  https://api.xcover.com/x/partners/{partner_code}/bookings/{booking_id}/quote_for_update
+    - POST   https://api.xcover.com/x/partners/{partner_code}/bookings/{booking_id}/confirm_update/{update_id}/
+    - POST   https://api.xcover.com/x/partners/{partner_code}/bookings/{booking_id}/cancel
+    - POST   https://api.xclaim.xcover.com/partners/{partnerCode}/claims
+  webhookEvents:
+    - BOOKING_CREATED
+    - BOOKING_UPDATED
+    - BOOKING_CANCELLED
+    - RENEWAL_CREATED
+    - RENEWAL_NOTIFICATION
+    - RENEWAL_DUE
+    - RENEWAL_EXPIRED
+sources:
+  - url: https://partner-docs.covergenius.com/offers/api/reference
+    type: APIReference
+    note: XCover Offers/Bookings endpoints are HTTPS REST under https://api.xcover.com/x.
+  - url: https://partner-docs.covergenius.com/offers/api/authentication
+    type: Documentation
+    note: HTTP Signature (HMAC) auth via X-Api-Key, Date, and Authorization signature headers; no WebSocket.
+  - url: https://partner-docs.covergenius.com/offers/api/webhooks
+    type: Documentation
+    note: Events delivered as outbound HTTP POST callbacks to a partner Listener URL, HMAC-SHA256 signed; not WebSocket or SSE.
+  - url: https://partner-docs.covergenius.com/xclaim/claims/create-a-new-claim
+    type: APIReference
+    note: XClaim claims creation is HTTPS REST; Bearer JWT on the standard endpoint.
+actions:
+  asyncapiPath: null
+  apisYmlUpdated: true
+  reason: |
+    No WebSocket or SSE streaming surface exists. Asynchronous notifications use
+    outbound HTTP POST webhook callbacks, which are out of AsyncAPI scope under
+    current API Evangelist guidance, so no AsyncAPI document was authored. The
+    webhook surface is captured as an API entry in apis.yml instead.

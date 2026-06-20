@@ -1,0 +1,61 @@
+specification: API Commons Plans
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
+provider: Cover Genius
+providerId: cover-genius
+created: '2026-06-20'
+modified: '2026-06-20'
+reconciled: false
+tags:
+- Insurance
+- Insurtech
+- Embedded Insurance
+- Protection
+- Claims
+- Plans
+description: >-
+  Cover Genius does not publish self-serve, public API pricing. XCover and
+  XClaim are partner/commercial integrations: a partner signs a distribution
+  agreement and Cover Genius (or its licensed insurer entities) underwrites
+  embedded insurance products sold through the partner's checkout. The economic
+  model is premium-based - partners earn commission / revenue share on policies
+  sold, and Cover Genius retains underwriting and platform economics. There are
+  no per-call API fees published; API access is provisioned with partner and
+  testing API keys after commercial onboarding. Specific commercial terms are
+  not reconciled in this artifact.
+notes: >-
+  Pricing is negotiated per partner agreement and is not publicly listed.
+  Verify commission, revenue share, and product economics directly with a Cover
+  Genius account manager / Client Solution Engineer during reconciliation.
+sources:
+- https://www.covergenius.com/xcover/
+- https://partner-docs.covergenius.com/offers/api/reference
+- https://partner-docs.covergenius.com/xclaim
+plans:
+- id: cover-genius-partner
+  name: Partner Distribution Agreement
+  type: enterprise
+  description: >-
+    Commercial embedded-insurance distribution partnership. API access (XCover
+    Offers/Bookings and XClaim) is provisioned per agreement; partners earn
+    commission / revenue share on policies sold through their platform.
+  entries:
+  - label: Partner Agreement
+    name: partner_agreement
+    type: flat
+    metric: contract
+    limit: -1
+    timeFrame: year
+    geo: global
+    unit: 1
+    price: contact sales
+    userMultiplied: false
+  elements:
+  - name: XCover Offers API
+  - name: XCover Bookings and Policies API
+  - name: XClaim Claims API
+  - name: Webhooks and Events
+  - name: Commission / Revenue Share
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

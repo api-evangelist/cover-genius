@@ -1,0 +1,219 @@
+{
+  "info": {
+    "name": "Cover Genius XCover API",
+    "description": "XCover Offers and Bookings/Policies API plus XClaim claims, from Cover Genius. Requests use HTTP Signature (HMAC) authentication with X-Api-Key, Date, and Authorization signature headers.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.xcover.com/x"
+    },
+    {
+      "key": "claimBaseUrl",
+      "value": "https://api.xclaim.xcover.com"
+    },
+    {
+      "key": "partnerCode",
+      "value": "LLODT"
+    },
+    {
+      "key": "apiKey",
+      "value": ""
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-Api-Key"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "Offers",
+      "item": [
+        {
+          "name": "Create offer",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/partners/{{partnerCode}}/offers/",
+              "host": ["{{baseUrl}}"],
+              "path": ["partners", "{{partnerCode}}", "offers", ""]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"request\": [],\n  \"quotePackage\": {\n    \"currency\": \"USD\",\n    \"customer_country\": \"US\",\n    \"customer_language\": \"en\"\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Creates one or more insurance offers (quotes) for a customer based on supplied context."
+          }
+        },
+        {
+          "name": "Opt out of offer",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/partners/{{partnerCode}}/offers/{{offerId}}/opt_out/",
+              "host": ["{{baseUrl}}"],
+              "path": ["partners", "{{partnerCode}}", "offers", "{{offerId}}", "opt_out", ""]
+            },
+            "description": "Records that a customer has declined a presented insurance offer."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Bookings",
+      "item": [
+        {
+          "name": "Confirm offer (create booking)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "x-idempotency-key", "value": "{{$guid}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/partners/{{partnerCode}}/offers/{{offerId}}/confirm/",
+              "host": ["{{baseUrl}}"],
+              "path": ["partners", "{{partnerCode}}", "offers", "{{offerId}}", "confirm", ""]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"quotes\": [],\n  \"policyholder\": {\n    \"first_name\": \"\",\n    \"last_name\": \"\",\n    \"email\": \"\"\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Confirms selected quotes from an offer into a bound policy. Supports x-idempotency-key."
+          }
+        },
+        {
+          "name": "Get booking",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/partners/{{partnerCode}}/bookings/{{bookingId}}/",
+              "host": ["{{baseUrl}}"],
+              "path": ["partners", "{{partnerCode}}", "bookings", "{{bookingId}}", ""]
+            },
+            "description": "Retrieves the details of a confirmed booking and its policies."
+          }
+        },
+        {
+          "name": "Modify booking",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/partners/{{partnerCode}}/bookings/{{bookingId}}/",
+              "host": ["{{baseUrl}}"],
+              "path": ["partners", "{{partnerCode}}", "bookings", "{{bookingId}}", ""]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"quotes\": []\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Applies modifications directly to a confirmed booking."
+          }
+        },
+        {
+          "name": "Quote booking modification",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/partners/{{partnerCode}}/bookings/{{bookingId}}/quote_for_update",
+              "host": ["{{baseUrl}}"],
+              "path": ["partners", "{{partnerCode}}", "bookings", "{{bookingId}}", "quote_for_update"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"quotes\": []\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Previews the price impact of a modification, returning an update_id."
+          }
+        },
+        {
+          "name": "Confirm booking modification",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/partners/{{partnerCode}}/bookings/{{bookingId}}/confirm_update/{{updateId}}/",
+              "host": ["{{baseUrl}}"],
+              "path": ["partners", "{{partnerCode}}", "bookings", "{{bookingId}}", "confirm_update", "{{updateId}}", ""]
+            },
+            "description": "Confirms a previously previewed booking modification by update_id."
+          }
+        },
+        {
+          "name": "Cancel booking",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/partners/{{partnerCode}}/bookings/{{bookingId}}/cancel",
+              "host": ["{{baseUrl}}"],
+              "path": ["partners", "{{partnerCode}}", "bookings", "{{bookingId}}", "cancel"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"preview\": true\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Cancels a booking; preview true returns a cancellation_id and refund preview."
+          }
+        }
+      ]
+    },
+    {
+      "name": "XClaim",
+      "item": [
+        {
+          "name": "Create a new claim",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{claimBaseUrl}}/partners/{{partnerCode}}/claims",
+              "host": ["{{claimBaseUrl}}"],
+              "path": ["partners", "{{partnerCode}}", "claims"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"claimTypeId\": \"\",\n  \"bookingReference\": \"\",\n  \"quoteReference\": \"\",\n  \"language\": \"en\",\n  \"sectionFields\": []\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Files a new claim against a partner policy."
+          }
+        }
+      ]
+    }
+  ]
+}

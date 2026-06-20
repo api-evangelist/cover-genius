@@ -1,0 +1,113 @@
+specification: FinOps Framework
+specificationVersion: '1.0'
+schema: https://www.finops.org/framework/
+provider: Cover Genius
+providerId: cover-genius
+created: '2026-06-20'
+modified: '2026-06-20'
+reconciled: false
+tags:
+- Insurance
+- Insurtech
+- Embedded Insurance
+- Protection
+- Claims
+- FinOps
+- Cost Management
+- FOCUS
+description: >-
+  FinOps view of a Cover Genius XCover / XClaim integration. Cover Genius is not
+  a metered, pay-per-call API vendor; it is an embedded-insurance distribution
+  partner. The relevant financial flows are premium-based - gross written
+  premium on policies sold, commission / revenue share earned by the partner,
+  taxes and surcharges, claim payouts, and refunds on cancellation - rather than
+  per-API-request cloud spend. There is no published usage-based API price list,
+  so cost is governed by the partner agreement and the volume/mix of policies
+  sold. Meters below model the premium and settlement flows a partner would
+  reconcile, not API call charges.
+notes: >-
+  Premium, commission, tax, and claims economics are governed by the partner
+  distribution agreement and vary by product, geography, and insurer entity.
+  Reconcile against partner settlement reports and the XCover/XClaim webhook
+  event stream rather than an API price list.
+sources:
+- https://www.covergenius.com/xcover/
+- https://partner-docs.covergenius.com/offers/api/reference
+- https://partner-docs.covergenius.com/xclaim
+- https://focus.finops.org/focus-specification/v1-3/
+alignedWith:
+  framework: FinOps Foundation Framework
+  frameworkUrl: https://www.finops.org/framework/
+  dataSpec: FOCUS
+  dataSpecVersion: '1.3'
+  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/
+publisherName: Cover Genius
+serviceCategory: Insurance and Financial Services
+billingModel:
+  pricingCategory: Commission-Based
+  billingFrequency: Per Agreement
+  billingCurrency: USD
+  chargeCategories:
+  - Premium
+  - Commission
+  - Tax
+  - Refund
+  - ClaimPayout
+focusColumns:
+  ServiceName: XCover
+  ServiceCategory: Insurance and Financial Services
+  ProviderName: Cover Genius
+  PublisherName: Cover Genius
+  InvoiceIssuerName: Cover Genius
+  BillingCurrency: USD
+  ChargeCategory: Premium
+  PricingCategory: Commission-Based
+meters:
+- name: gross_written_premium
+  description: Premium written on policies bound via confirm offer (booking).
+  unit: currency
+  aggregation: sum
+  dimensions:
+  - partner
+  - product
+  - geo
+- name: partner_commission
+  description: Commission / revenue share earned by the partner on sold policies.
+  unit: currency
+  aggregation: sum
+  dimensions:
+  - partner
+  - product
+- name: taxes_and_surcharges
+  description: Taxes and surcharges applied to premium per jurisdiction.
+  unit: currency
+  aggregation: sum
+  dimensions:
+  - partner
+  - geo
+- name: refunds
+  description: Premium refunded on booking cancellations.
+  unit: currency
+  aggregation: sum
+  dimensions:
+  - partner
+  - product
+- name: claim_payouts
+  description: Amounts paid out to customers via XClaim settlements.
+  unit: currency
+  aggregation: sum
+  dimensions:
+  - partner
+  - product
+principles:
+- name: Visibility
+  description: Reconcile premium, commission, refunds, and claim payouts from partner settlement reports and the XCover/XClaim webhook event stream.
+- name: Allocation
+  description: Tag bookings with partner_transaction_id and product to map premium and commission to internal lines of business.
+- name: Optimization
+  description: Tune offer placement, product mix, and conversion to maximize attach rate and commission; monitor cancellation/refund rates.
+- name: Accountability
+  description: Assign owners per product line; review attach rate, premium, and claims experience against targets on the agreement cycle.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com
