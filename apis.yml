@@ -95,6 +95,10 @@ apis:
     lifecycle events (BOOKING_CREATED, BOOKING_UPDATED, BOOKING_CANCELLED, and renewal
     events), HMAC-SHA256 signed for verification.
 common:
+- type: DomainSecurity
+  url: security/cover-genius-domain-security.yml
+- type: Authentication
+  url: authentication/cover-genius-authentication.yml
 - type: LinkedIn
   url: https://www.linkedin.com/company/cover-genius
 - type: Website
@@ -107,6 +111,8 @@ common:
   url: rate-limits/cover-genius-rate-limits.yml
 - type: FinOps
   url: finops/cover-genius-finops.yml
+- url: https://covergenius.com/resources/blog/
+  type: Blog
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com

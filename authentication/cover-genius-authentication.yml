@@ -1,0 +1,19 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/cover-genius-openapi.yml
+summary:
+  types:
+  - apiKey
+  api_key_in:
+  - header
+schemes:
+- name: XCoverSignature
+  type: apiKey
+  in: header
+  parameter: Authorization
+  description: HTTP Signature authentication. Each request carries an X-Api-Key header, a Date
+    header (RFC 822 GMT), and an Authorization header of the form Signature keyId="{API_KEY}",algorithm="hmac-sha512",signature="{base64}".
+    The signature is an HMAC of the canonical string (by default the date header) computed with
+    the partner's secret key.
+  sources:
+  - openapi/cover-genius-openapi.yml
