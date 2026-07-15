@@ -95,6 +95,8 @@ apis:
     lifecycle events (BOOKING_CREATED, BOOKING_UPDATED, BOOKING_CANCELLED, and renewal
     events), HMAC-SHA256 signed for verification.
 common:
+- type: AgenticAccess
+  url: agentic-access/cover-genius-agentic-access.yml
 - type: DomainSecurity
   url: security/cover-genius-domain-security.yml
 - type: Authentication
