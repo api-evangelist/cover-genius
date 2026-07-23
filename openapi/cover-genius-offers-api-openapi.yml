@@ -1,0 +1,177 @@
+openapi: 3.0.1
+info:
+  title: Cover Genius XCover Bookings Offers API
+  description: The XCover distribution API from Cover Genius lets partners create embedded insurance offers (quotes) at the point of sale, confirm them into bound policies (bookings), retrieve and modify bookings, and cancel them. Requests are authenticated with an HTTP Signature (HMAC) scheme using an X-Api-Key header, a Date header, and an Authorization signature header. This document models the documented XCover Offers and Bookings surface served from https://api.xcover.com/x.
+  termsOfService: https://www.covergenius.com/terms-of-use/
+  contact:
+    name: Cover Genius Partner Support
+    url: https://partner-docs.covergenius.com
+  version: '2.0'
+servers:
+- url: https://api.xcover.com/x
+  description: XCover production base URL
+security:
+- XCoverSignature: []
+tags:
+- name: Offers
+paths:
+  /partners/{partner_code}/offers/:
+    post:
+      operationId: createOffer
+      tags:
+      - Offers
+      summary: Create offer
+      description: Creates one or more real-time insurance offers (quotes) for a customer based on supplied customer and context data. Returns offer and quote identifiers, pricing, localized content, and product disclosure URLs.
+      parameters:
+      - $ref: '#/components/parameters/PartnerCode'
+      - name: include_content
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: true
+        description: Include localized content blocks in the response.
+      - name: extra_fields
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Comma-separated list of extra response fields (e.g. tax, commission, benefits, surcharge).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOfferRequest'
+      responses:
+        '200':
+          description: Offer created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Offer'
+        '400':
+          $ref: '#/components/responses/Error'
+        '401':
+          $ref: '#/components/responses/Error'
+  /partners/{partner_code}/offers/{offer_id}/opt_out/:
+    post:
+      operationId: optOutOffer
+      tags:
+      - Offers
+      summary: Opt out of offer
+      description: Records that a customer has declined a presented insurance offer.
+      parameters:
+      - $ref: '#/components/parameters/PartnerCode'
+      - $ref: '#/components/parameters/OfferId'
+      responses:
+        '200':
+          description: Opt-out recorded.
+        '401':
+          $ref: '#/components/responses/Error'
+components:
+  schemas:
+    Offer:
+      type: object
+      properties:
+        id:
+          type: string
+        quotes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Quote'
+        total_price:
+          type: string
+        total_price_formatted:
+          type: string
+        currency:
+          type: string
+        pds_url:
+          type: string
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+    CreateOfferRequest:
+      type: object
+      required:
+      - request
+      properties:
+        request:
+          type: array
+          description: One or more quote requests, each targeting a product/schema.
+          items:
+            type: object
+            properties:
+              policy_type:
+                type: string
+              policy_type_version:
+                type: integer
+              policy_start_date:
+                type: string
+                format: date-time
+        quotePackage:
+          type: object
+          description: Customer-level package context.
+          properties:
+            currency:
+              type: string
+              example: USD
+            customer_country:
+              type: string
+              example: US
+            customer_language:
+              type: string
+              example: en
+            customer_region:
+              type: string
+    Quote:
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+          description: Quote/policy status (e.g. QUOTED, RECEIVED, CONFIRMED, CANCELLED).
+        price:
+          type: string
+        currency:
+          type: string
+        policy_start_date:
+          type: string
+          format: date-time
+  parameters:
+    OfferId:
+      name: offer_id
+      in: path
+      required: true
+      schema:
+        type: string
+      description: Identifier of an offer returned by createOffer.
+    PartnerCode:
+      name: partner_code
+      in: path
+      required: true
+      schema:
+        type: string
+      description: The partner's unique XCover partner code (e.g. LLODT).
+  responses:
+    Error:
+      description: Error response.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    XCoverSignature:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: HTTP Signature authentication. Each request carries an X-Api-Key header, a Date header (RFC 822 GMT), and an Authorization header of the form Signature keyId="{API_KEY}",algorithm="hmac-sha512",signature="{base64}". The signature is an HMAC of the canonical string (by default the date header) computed with the partner's secret key.
