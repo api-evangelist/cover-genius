@@ -6,7 +6,20 @@ description: Cover Genius is an insurtech company providing embedded insurance a
   protection at the point of sale. The XCover distribution API lets partners create
   insurance offers, confirm bookings, modify and cancel policies, and receive policy
   lifecycle webhooks, while the XClaim API handles claims intake and instant payments.
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/cover-genius.png
 tags:
 - Insurance
 - Insurtech
@@ -17,66 +30,6 @@ created: '2026-06-20'
 modified: '2026-06-20'
 specificationVersion: '0.19'
 apis:
-- aid: cover-genius:xcover-offers-api
-  name: XCover Offers API
-  tags:
-  - Offers
-  - Quotes
-  - Embedded Insurance
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://partner-docs.covergenius.com/offers/api/reference
-  baseURL: https://api.xcover.com/x
-  properties:
-  - url: https://partner-docs.covergenius.com/offers/guides/purchase-workflow-overview/create-offer
-    type: Documentation
-  - url: https://partner-docs.covergenius.com/offers/api/reference/create-offer
-    type: APIReference
-  - url: openapi/cover-genius-openapi.yml
-    type: OpenAPI
-  - url: collections/cover-genius.postman_collection.json
-    type: Postman
-  description: Creates real-time, context-aware insurance offers (quotes) for a partner's
-    customers at the point of sale, returning priced products, localized content, and
-    product disclosure documents.
-- aid: cover-genius:xcover-bookings-policies-api
-  name: XCover Bookings and Policies API
-  tags:
-  - Bookings
-  - Policies
-  - Confirmation
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://partner-docs.covergenius.com/offers/api/reference/confirm-offer
-  baseURL: https://api.xcover.com/x
-  properties:
-  - url: https://partner-docs.covergenius.com/offers/guides/purchase-workflow-overview
-    type: Documentation
-  - url: https://partner-docs.covergenius.com/offers/api/reference/confirm-offer
-    type: APIReference
-  - url: openapi/cover-genius-openapi.yml
-    type: OpenAPI
-  - url: collections/cover-genius.postman_collection.json
-    type: Postman
-  description: Confirms offers into bound policies and retrieves, modifies (quote-for-update
-    then confirm-update), and cancels bookings, with idempotency-key support on purchase
-    operations.
-- aid: cover-genius:xclaim-claims-api
-  name: XClaim Claims API
-  tags:
-  - Claims
-  - Payments
-  - Settlement
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://partner-docs.covergenius.com/xclaim
-  baseURL: https://api.xclaim.xcover.com
-  properties:
-  - url: https://partner-docs.covergenius.com/xclaim/readme
-    type: Documentation
-  - url: https://partner-docs.covergenius.com/xclaim/claims/create-a-new-claim
-    type: APIReference
-  - url: openapi/cover-genius-openapi.yml
-    type: OpenAPI
-  description: Files new claims against a partner policy and lists existing claims,
-    driving Cover Genius's automated claims assessment and instant payment experience.
 - aid: cover-genius:xcover-webhooks
   name: XCover Webhooks and Events
   tags:
@@ -91,9 +44,59 @@ apis:
     type: Documentation
   - url: https://partner-docs.covergenius.com/xclaim/webhooks
     type: APIReference
-  description: HTTP POST webhook callbacks notifying partner listener URLs of policy
-    lifecycle events (BOOKING_CREATED, BOOKING_UPDATED, BOOKING_CANCELLED, and renewal
-    events), HMAC-SHA256 signed for verification.
+  description: >-
+    HTTP POST webhook callbacks notifying partner listener URLs of policy lifecycle events (BOOKING_CREATED,
+    BOOKING_UPDATED, BOOKING_CANCELLED, and renewal events), HMAC-SHA256 signed for verification.
+- aid: cover-genius:cover-genius-bookings-api
+  name: Cover Genius Bookings API
+  description: The Bookings API from Cover Genius — 5 operation(s) for bookings.
+  humanURL: https://partner-docs.covergenius.com/offers/api/reference
+  baseURL: https://api.xcover.com/x
+  tags:
+  - Bookings
+  properties:
+  - type: OpenAPI
+    url: openapi/cover-genius-bookings-api-openapi.yml
+  - type: Documentation
+    url: >-
+      https://partner-docs.covergenius.com/offers/guides/purchase-workflow-overview/create-offer
+  - type: APIReference
+    url: https://partner-docs.covergenius.com/offers/api/reference/create-offer
+  - type: Postman
+    url: collections/cover-genius.postman_collection.json
+  - type: Documentation
+    url: https://partner-docs.covergenius.com/offers/guides/purchase-workflow-overview
+  - type: APIReference
+    url: https://partner-docs.covergenius.com/offers/api/reference/confirm-offer
+  - type: Documentation
+    url: https://partner-docs.covergenius.com/xclaim/readme
+  - type: APIReference
+    url: https://partner-docs.covergenius.com/xclaim/claims/create-a-new-claim
+- aid: cover-genius:cover-genius-offers-api
+  name: Cover Genius Offers API
+  description: The Offers API from Cover Genius — 2 operation(s) for offers.
+  humanURL: https://partner-docs.covergenius.com/offers/api/reference
+  baseURL: https://api.xcover.com/x
+  tags:
+  - Offers
+  properties:
+  - type: OpenAPI
+    url: openapi/cover-genius-offers-api-openapi.yml
+  - type: Documentation
+    url: >-
+      https://partner-docs.covergenius.com/offers/guides/purchase-workflow-overview/create-offer
+  - type: APIReference
+    url: https://partner-docs.covergenius.com/offers/api/reference/create-offer
+  - type: Postman
+    url: collections/cover-genius.postman_collection.json
+  - type: Documentation
+    url: https://partner-docs.covergenius.com/offers/guides/purchase-workflow-overview
+  - type: APIReference
+    url: https://partner-docs.covergenius.com/offers/api/reference/confirm-offer
+  - type: Documentation
+    url: https://partner-docs.covergenius.com/xclaim/readme
+  - type: APIReference
+    url: https://partner-docs.covergenius.com/xclaim/claims/create-a-new-claim
 common:
 - type: AgenticAccess
   url: agentic-access/cover-genius-agentic-access.yml
