@@ -1,0 +1,16 @@
+{
+  "provider": "cover-genius",
+  "sources": [
+    "cover-genius-bookings-api-openapi.yml",
+    "cover-genius-offers-api-openapi.yml"
+  ],
+  "outputs": [
+    "cover-genius-bookings-api-openapi.yml",
+    "cover-genius-offers-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

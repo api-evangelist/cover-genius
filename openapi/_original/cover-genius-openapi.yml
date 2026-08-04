@@ -1,0 +1,452 @@
+openapi: 3.0.1
+info:
+  title: Cover Genius XCover API
+  description: >-
+    The XCover distribution API from Cover Genius lets partners create embedded
+    insurance offers (quotes) at the point of sale, confirm them into bound
+    policies (bookings), retrieve and modify bookings, and cancel them. Requests
+    are authenticated with an HTTP Signature (HMAC) scheme using an X-Api-Key
+    header, a Date header, and an Authorization signature header. This document
+    models the documented XCover Offers and Bookings surface served from
+    https://api.xcover.com/x.
+  termsOfService: https://www.covergenius.com/terms-of-use/
+  contact:
+    name: Cover Genius Partner Support
+    url: https://partner-docs.covergenius.com
+  version: '2.0'
+servers:
+  - url: https://api.xcover.com/x
+    description: XCover production base URL
+security:
+  - XCoverSignature: []
+paths:
+  /partners/{partner_code}/offers/:
+    post:
+      operationId: createOffer
+      tags:
+        - Offers
+      summary: Create offer
+      description: >-
+        Creates one or more real-time insurance offers (quotes) for a customer
+        based on supplied customer and context data. Returns offer and quote
+        identifiers, pricing, localized content, and product disclosure URLs.
+      parameters:
+        - $ref: '#/components/parameters/PartnerCode'
+        - name: include_content
+          in: query
+          required: false
+          schema:
+            type: boolean
+            default: true
+          description: Include localized content blocks in the response.
+        - name: extra_fields
+          in: query
+          required: false
+          schema:
+            type: string
+          description: >-
+            Comma-separated list of extra response fields (e.g. tax, commission,
+            benefits, surcharge).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOfferRequest'
+      responses:
+        '200':
+          description: Offer created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Offer'
+        '400':
+          $ref: '#/components/responses/Error'
+        '401':
+          $ref: '#/components/responses/Error'
+  /partners/{partner_code}/offers/{offer_id}/opt_out/:
+    post:
+      operationId: optOutOffer
+      tags:
+        - Offers
+      summary: Opt out of offer
+      description: Records that a customer has declined a presented insurance offer.
+      parameters:
+        - $ref: '#/components/parameters/PartnerCode'
+        - $ref: '#/components/parameters/OfferId'
+      responses:
+        '200':
+          description: Opt-out recorded.
+        '401':
+          $ref: '#/components/responses/Error'
+  /partners/{partner_code}/offers/{offer_id}/confirm/:
+    post:
+      operationId: confirmOffer
+      tags:
+        - Bookings
+      summary: Confirm offer (create booking)
+      description: >-
+        Confirms selected quotes from an offer into a bound policy, creating a
+        booking. Supports an x-idempotency-key header to safely retry; a duplicate
+        key returns 409.
+      parameters:
+        - $ref: '#/components/parameters/PartnerCode'
+        - $ref: '#/components/parameters/OfferId'
+        - name: x-idempotency-key
+          in: header
+          required: false
+          schema:
+            type: string
+            format: uuid
+          description: Idempotency key (UUID) to deduplicate confirm requests.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConfirmOfferRequest'
+      responses:
+        '200':
+          description: Booking confirmed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+        '409':
+          $ref: '#/components/responses/Error'
+        '401':
+          $ref: '#/components/responses/Error'
+  /partners/{partner_code}/bookings/{booking_id}/:
+    get:
+      operationId: getBooking
+      tags:
+        - Bookings
+      summary: Get booking
+      description: Retrieves the details of a confirmed booking and its policies.
+      parameters:
+        - $ref: '#/components/parameters/PartnerCode'
+        - $ref: '#/components/parameters/BookingId'
+      responses:
+        '200':
+          description: Booking details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+        '404':
+          $ref: '#/components/responses/Error'
+    patch:
+      operationId: modifyBooking
+      tags:
+        - Bookings
+      summary: Modify booking
+      description: Applies modifications directly to a confirmed booking.
+      parameters:
+        - $ref: '#/components/parameters/PartnerCode'
+        - $ref: '#/components/parameters/BookingId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModifyBookingRequest'
+      responses:
+        '200':
+          description: Booking modified.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+        '400':
+          $ref: '#/components/responses/Error'
+  /partners/{partner_code}/bookings/{booking_id}/quote_for_update:
+    patch:
+      operationId: quoteForUpdate
+      tags:
+        - Bookings
+      summary: Quote booking modification
+      description: >-
+        Previews the price impact of a proposed modification without applying it.
+        Returns an update_id to be used with confirm_update.
+      parameters:
+        - $ref: '#/components/parameters/PartnerCode'
+        - $ref: '#/components/parameters/BookingId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModifyBookingRequest'
+      responses:
+        '200':
+          description: Update preview with price difference and update_id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdatePreview'
+  /partners/{partner_code}/bookings/{booking_id}/confirm_update/{update_id}/:
+    post:
+      operationId: confirmBookingUpdate
+      tags:
+        - Bookings
+      summary: Confirm booking modification
+      description: Confirms a previously previewed booking modification by update_id.
+      parameters:
+        - $ref: '#/components/parameters/PartnerCode'
+        - $ref: '#/components/parameters/BookingId'
+        - name: update_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Identifier returned by quote_for_update.
+      responses:
+        '200':
+          description: Modification confirmed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+  /partners/{partner_code}/bookings/{booking_id}/cancel:
+    post:
+      operationId: cancelBooking
+      tags:
+        - Bookings
+      summary: Cancel booking
+      description: >-
+        Cancels a booking. With preview true the response returns a cancellation_id
+        and refund preview without cancelling; with preview false the booking is
+        cancelled immediately.
+      parameters:
+        - $ref: '#/components/parameters/PartnerCode'
+        - $ref: '#/components/parameters/BookingId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CancelBookingRequest'
+      responses:
+        '200':
+          description: Cancellation preview or confirmation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CancellationResult'
+        '400':
+          $ref: '#/components/responses/Error'
+components:
+  securitySchemes:
+    XCoverSignature:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: >-
+        HTTP Signature authentication. Each request carries an X-Api-Key header,
+        a Date header (RFC 822 GMT), and an Authorization header of the form
+        Signature keyId="{API_KEY}",algorithm="hmac-sha512",signature="{base64}".
+        The signature is an HMAC of the canonical string (by default the date
+        header) computed with the partner's secret key.
+  parameters:
+    PartnerCode:
+      name: partner_code
+      in: path
+      required: true
+      schema:
+        type: string
+      description: The partner's unique XCover partner code (e.g. LLODT).
+    OfferId:
+      name: offer_id
+      in: path
+      required: true
+      schema:
+        type: string
+      description: Identifier of an offer returned by createOffer.
+    BookingId:
+      name: booking_id
+      in: path
+      required: true
+      schema:
+        type: string
+      description: Identifier of a confirmed booking.
+  responses:
+    Error:
+      description: Error response.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    CreateOfferRequest:
+      type: object
+      required:
+        - request
+      properties:
+        request:
+          type: array
+          description: One or more quote requests, each targeting a product/schema.
+          items:
+            type: object
+            properties:
+              policy_type:
+                type: string
+              policy_type_version:
+                type: integer
+              policy_start_date:
+                type: string
+                format: date-time
+        quotePackage:
+          type: object
+          description: Customer-level package context.
+          properties:
+            currency:
+              type: string
+              example: USD
+            customer_country:
+              type: string
+              example: US
+            customer_language:
+              type: string
+              example: en
+            customer_region:
+              type: string
+    ConfirmOfferRequest:
+      type: object
+      required:
+        - quotes
+        - policyholder
+      properties:
+        quotes:
+          type: array
+          description: Quote IDs from the offer to bind into policies.
+          items:
+            type: string
+        policyholder:
+          $ref: '#/components/schemas/Policyholder'
+        partner_transaction_id:
+          type: string
+        payment_details:
+          type: object
+    Policyholder:
+      type: object
+      required:
+        - first_name
+        - last_name
+        - email
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+        country:
+          type: string
+        age:
+          type: integer
+    Offer:
+      type: object
+      properties:
+        id:
+          type: string
+        quotes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Quote'
+        total_price:
+          type: string
+        total_price_formatted:
+          type: string
+        currency:
+          type: string
+        pds_url:
+          type: string
+    Quote:
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+          description: Quote/policy status (e.g. QUOTED, RECEIVED, CONFIRMED, CANCELLED).
+        price:
+          type: string
+        currency:
+          type: string
+        policy_start_date:
+          type: string
+          format: date-time
+    Booking:
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+        policies:
+          type: array
+          items:
+            $ref: '#/components/schemas/Quote'
+        policyholder:
+          $ref: '#/components/schemas/Policyholder'
+        partner_transaction_id:
+          type: string
+    ModifyBookingRequest:
+      type: object
+      properties:
+        quotes:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              policy_start_date:
+                type: string
+                format: date-time
+              fields:
+                type: object
+    UpdatePreview:
+      type: object
+      properties:
+        update_id:
+          type: string
+        price_difference:
+          type: string
+        price_difference_formatted:
+          type: string
+        currency:
+          type: string
+    CancelBookingRequest:
+      type: object
+      properties:
+        preview:
+          type: boolean
+          description: When true, returns a cancellation preview without cancelling.
+        cancellation_reason:
+          type: string
+    CancellationResult:
+      type: object
+      properties:
+        cancellation_id:
+          type: string
+        refund_amount:
+          type: string
+        refund_amount_formatted:
+          type: string
+        status:
+          type: string
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
