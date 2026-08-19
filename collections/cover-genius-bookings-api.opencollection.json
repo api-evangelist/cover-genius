@@ -1,0 +1,204 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cover Genius XCover Bookings API",
+    "version": "2.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Bookings",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Confirm offer (create booking)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.xcover.com/x/partners/:partner_code/offers/:offer_id/confirm/",
+            "headers": [
+              {
+                "name": "x-idempotency-key",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "partner_code",
+                "value": "",
+                "type": "path",
+                "description": "The partner's unique XCover partner code (e.g. LLODT)."
+              },
+              {
+                "name": "offer_id",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of an offer returned by createOffer."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Confirms selected quotes from an offer into a bound policy, creating a booking. Supports an x-idempotency-key header to safely retry; a duplicate key returns 409."
+        },
+        {
+          "info": {
+            "name": "Get booking",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.xcover.com/x/partners/:partner_code/bookings/:booking_id/",
+            "params": [
+              {
+                "name": "partner_code",
+                "value": "",
+                "type": "path",
+                "description": "The partner's unique XCover partner code (e.g. LLODT)."
+              },
+              {
+                "name": "booking_id",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of a confirmed booking."
+              }
+            ]
+          },
+          "docs": "Retrieves the details of a confirmed booking and its policies."
+        },
+        {
+          "info": {
+            "name": "Modify booking",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.xcover.com/x/partners/:partner_code/bookings/:booking_id/",
+            "params": [
+              {
+                "name": "partner_code",
+                "value": "",
+                "type": "path",
+                "description": "The partner's unique XCover partner code (e.g. LLODT)."
+              },
+              {
+                "name": "booking_id",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of a confirmed booking."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Applies modifications directly to a confirmed booking."
+        },
+        {
+          "info": {
+            "name": "Quote booking modification",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.xcover.com/x/partners/:partner_code/bookings/:booking_id/quote_for_update",
+            "params": [
+              {
+                "name": "partner_code",
+                "value": "",
+                "type": "path",
+                "description": "The partner's unique XCover partner code (e.g. LLODT)."
+              },
+              {
+                "name": "booking_id",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of a confirmed booking."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Previews the price impact of a proposed modification without applying it. Returns an update_id to be used with confirm_update."
+        },
+        {
+          "info": {
+            "name": "Confirm booking modification",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.xcover.com/x/partners/:partner_code/bookings/:booking_id/confirm_update/:update_id/",
+            "params": [
+              {
+                "name": "partner_code",
+                "value": "",
+                "type": "path",
+                "description": "The partner's unique XCover partner code (e.g. LLODT)."
+              },
+              {
+                "name": "booking_id",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of a confirmed booking."
+              },
+              {
+                "name": "update_id",
+                "value": "",
+                "type": "path",
+                "description": "Identifier returned by quote_for_update."
+              }
+            ]
+          },
+          "docs": "Confirms a previously previewed booking modification by update_id."
+        },
+        {
+          "info": {
+            "name": "Cancel booking",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.xcover.com/x/partners/:partner_code/bookings/:booking_id/cancel",
+            "params": [
+              {
+                "name": "partner_code",
+                "value": "",
+                "type": "path",
+                "description": "The partner's unique XCover partner code (e.g. LLODT)."
+              },
+              {
+                "name": "booking_id",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of a confirmed booking."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Cancels a booking. With preview true the response returns a cancellation_id and refund preview without cancelling; with preview false the booking is cancelled immediately."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

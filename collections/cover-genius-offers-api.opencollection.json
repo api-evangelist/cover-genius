@@ -1,0 +1,86 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cover Genius XCover Bookings Offers API",
+    "version": "2.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Offers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create offer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.xcover.com/x/partners/:partner_code/offers/",
+            "params": [
+              {
+                "name": "partner_code",
+                "value": "",
+                "type": "path",
+                "description": "The partner's unique XCover partner code (e.g. LLODT)."
+              },
+              {
+                "name": "include_content",
+                "value": "",
+                "type": "query",
+                "description": "Include localized content blocks in the response."
+              },
+              {
+                "name": "extra_fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated list of extra response fields (e.g. tax, commission, benefits, surcharge)."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates one or more real-time insurance offers (quotes) for a customer based on supplied customer and context data. Returns offer and quote identifiers, pricing, localized content, and product disclosure URLs."
+        },
+        {
+          "info": {
+            "name": "Opt out of offer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.xcover.com/x/partners/:partner_code/offers/:offer_id/opt_out/",
+            "params": [
+              {
+                "name": "partner_code",
+                "value": "",
+                "type": "path",
+                "description": "The partner's unique XCover partner code (e.g. LLODT)."
+              },
+              {
+                "name": "offer_id",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of an offer returned by createOffer."
+              }
+            ]
+          },
+          "docs": "Records that a customer has declined a presented insurance offer."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

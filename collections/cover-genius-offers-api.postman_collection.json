@@ -1,0 +1,511 @@
+{
+  "item": [
+    {
+      "id": "4cdd6069-f277-4ed1-aa5f-70b3c0479912",
+      "name": "Offers",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "ababb5db-8c1a-4ab5-b5fc-02da3f4c9ca7",
+          "name": "Create offer",
+          "request": {
+            "name": "Create offer",
+            "description": {
+              "content": "Creates one or more real-time insurance offers (quotes) for a customer based on supplied customer and context data. Returns offer and quote identifiers, pricing, localized content, and product disclosure URLs.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "partners",
+                ":partner_code",
+                "offers",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "include_content",
+                  "value": "true",
+                  "description": "Include localized content blocks in the response."
+                },
+                {
+                  "disabled": false,
+                  "key": "extra_fields",
+                  "value": "<string>",
+                  "description": "Comma-separated list of extra response fields (e.g. tax, commission, benefits, surcharge)."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "partner_code",
+                  "description": "(Required) The partner's unique XCover partner code (e.g. LLODT)."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"request\": [\n    {\n      \"policy_type\": \"<string>\",\n      \"policy_type_version\": \"<integer>\",\n      \"policy_start_date\": \"<dateTime>\"\n    },\n    {\n      \"policy_type\": \"<string>\",\n      \"policy_type_version\": \"<integer>\",\n      \"policy_start_date\": \"<dateTime>\"\n    }\n  ],\n  \"quotePackage\": {\n    \"currency\": \"<string>\",\n    \"customer_country\": \"<string>\",\n    \"customer_language\": \"<string>\",\n    \"customer_region\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "39b35044-715c-4528-be3c-649b897fa547",
+              "name": "Offer created.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "partners",
+                    ":partner_code",
+                    "offers",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "include_content",
+                      "value": "true"
+                    },
+                    {
+                      "key": "extra_fields",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "partner_code",
+                      "description": "(Required) The partner's unique XCover partner code (e.g. LLODT)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"request\": [\n    {\n      \"policy_type\": \"<string>\",\n      \"policy_type_version\": \"<integer>\",\n      \"policy_start_date\": \"<dateTime>\"\n    },\n    {\n      \"policy_type\": \"<string>\",\n      \"policy_type_version\": \"<integer>\",\n      \"policy_start_date\": \"<dateTime>\"\n    }\n  ],\n  \"quotePackage\": {\n    \"currency\": \"USD\",\n    \"customer_country\": \"US\",\n    \"customer_language\": \"en\",\n    \"customer_region\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"quotes\": [\n    {\n      \"id\": \"string\",\n      \"status\": \"string\",\n      \"price\": \"string\",\n      \"currency\": \"string\",\n      \"policy_start_date\": \"1990-11-18T18:10:08.903Z\"\n    },\n    {\n      \"id\": \"string\",\n      \"status\": \"string\",\n      \"price\": \"string\",\n      \"currency\": \"string\",\n      \"policy_start_date\": \"2015-05-23T11:56:30.836Z\"\n    }\n  ],\n  \"total_price\": \"string\",\n  \"total_price_formatted\": \"string\",\n  \"currency\": \"string\",\n  \"pds_url\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8c547ceb-4364-4722-8005-2dd0b865d0bf",
+              "name": "Error response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "partners",
+                    ":partner_code",
+                    "offers",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "include_content",
+                      "value": "true"
+                    },
+                    {
+                      "key": "extra_fields",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "partner_code",
+                      "description": "(Required) The partner's unique XCover partner code (e.g. LLODT)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"request\": [\n    {\n      \"policy_type\": \"<string>\",\n      \"policy_type_version\": \"<integer>\",\n      \"policy_start_date\": \"<dateTime>\"\n    },\n    {\n      \"policy_type\": \"<string>\",\n      \"policy_type_version\": \"<integer>\",\n      \"policy_start_date\": \"<dateTime>\"\n    }\n  ],\n  \"quotePackage\": {\n    \"currency\": \"USD\",\n    \"customer_country\": \"US\",\n    \"customer_language\": \"en\",\n    \"customer_region\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\",\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ae5a1bea-ba1e-4a84-8d94-2f7480d4c1a6",
+              "name": "Error response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "partners",
+                    ":partner_code",
+                    "offers",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "include_content",
+                      "value": "true"
+                    },
+                    {
+                      "key": "extra_fields",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "partner_code",
+                      "description": "(Required) The partner's unique XCover partner code (e.g. LLODT)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"request\": [\n    {\n      \"policy_type\": \"<string>\",\n      \"policy_type_version\": \"<integer>\",\n      \"policy_start_date\": \"<dateTime>\"\n    },\n    {\n      \"policy_type\": \"<string>\",\n      \"policy_type_version\": \"<integer>\",\n      \"policy_start_date\": \"<dateTime>\"\n    }\n  ],\n  \"quotePackage\": {\n    \"currency\": \"USD\",\n    \"customer_country\": \"US\",\n    \"customer_language\": \"en\",\n    \"customer_region\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\",\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5bd08286-c5c7-4d2f-8126-8f6ed83da178",
+          "name": "Opt out of offer",
+          "request": {
+            "name": "Opt out of offer",
+            "description": {
+              "content": "Records that a customer has declined a presented insurance offer.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "partners",
+                ":partner_code",
+                "offers",
+                ":offer_id",
+                "opt_out",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "partner_code",
+                  "description": "(Required) The partner's unique XCover partner code (e.g. LLODT)."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "offer_id",
+                  "description": "(Required) Identifier of an offer returned by createOffer."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "678d32b0-15b4-4e62-85c4-a800a6b6981d",
+              "name": "Opt-out recorded.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "partners",
+                    ":partner_code",
+                    "offers",
+                    ":offer_id",
+                    "opt_out",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "partner_code",
+                      "description": "(Required) The partner's unique XCover partner code (e.g. LLODT)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "offer_id",
+                      "description": "(Required) Identifier of an offer returned by createOffer."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "f3694951-2fd1-425c-9a6f-b3488000c189",
+              "name": "Error response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "partners",
+                    ":partner_code",
+                    "offers",
+                    ":offer_id",
+                    "opt_out",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "partner_code",
+                      "description": "(Required) The partner's unique XCover partner code (e.g. LLODT)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "offer_id",
+                      "description": "(Required) Identifier of an offer returned by createOffer."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\",\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.xcover.com/x",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "Authorization"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "28127c0b-c8f7-4a5b-b3a5-4f8d5d0a6c4f",
+    "name": "Cover Genius XCover Bookings Offers API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The XCover distribution API from Cover Genius lets partners create embedded insurance offers (quotes) at the point of sale, confirm them into bound policies (bookings), retrieve and modify bookings, and cancel them. Requests are authenticated with an HTTP Signature (HMAC) scheme using an X-Api-Key header, a Date header, and an Authorization signature header. This document models the documented XCover Offers and Bookings surface served from https://api.xcover.com/x.\n\nContact Support:\n Name: Cover Genius Partner Support",
+      "type": "text/plain"
+    }
+  }
+}
