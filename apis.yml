@@ -33,6 +33,10 @@ apis:
 - aid: cover-genius:xcover-webhooks
   name: XCover Webhooks and Events
   tags:
+  - Webhook
+  - Event
+  - Notification
+  tags_raw:
   - Webhooks
   - Events
   - Notifications
