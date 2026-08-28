@@ -6,6 +6,18 @@ description: Cover Genius is an insurtech company providing embedded insurance a
   protection at the point of sale. The XCover distribution API lets partners create
   insurance offers, confirm bookings, modify and cancel policies, and receive policy
   lifecycle webhooks, while the XClaim API handles claims intake and instant payments.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: unknown
   onboarding: self-serve
