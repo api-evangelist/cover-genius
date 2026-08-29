@@ -114,6 +114,9 @@ apis:
   - type: APIReference
     url: https://partner-docs.covergenius.com/xclaim/claims/create-a-new-claim
 common:
+- type: CapabilityMap
+  url: capabilities/cover-genius-capability-edges.yml
+  name: Cover Genius Business Capability Map
 - type: AgenticAccess
   url: agentic-access/cover-genius-agentic-access.yml
 - type: DomainSecurity

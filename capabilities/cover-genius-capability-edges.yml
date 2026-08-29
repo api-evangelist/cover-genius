@@ -1,0 +1,35 @@
+slug: cover-genius
+provider: Cover Genius
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Insurance
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 2
+edges:
+- tag: Bookings
+  spec_file: cover-genius-bookings-api-openapi.yml
+  capability_id: BC-2140
+  capability_id_l1: BC-2140
+  capability_name: Policy Administration Management
+  confidence: 0.85
+  evidence: POST /partners/{partner_code}/offers/{offer_id}/confirm/ 'Confirm offer (create booking)';
+    PATCH ... modifyBooking; POST ... cancelBooking; schemas Booking, Policyholder, CancellationResult
+  reason: Confirming an offer into a bound policy and then modifying/cancelling it is administration of
+    in-force insurance contracts. Spans issuance, mid-term adjustment and cancellation, so L1 only.
+- tag: Offers
+  spec_file: cover-genius-offers-api-openapi.yml
+  capability_id: BC-2110.60
+  capability_id_l1: BC-2110
+  capability_name: Quote & Submission Management
+  confidence: 0.8
+  evidence: 'POST /partners/{partner_code}/offers/ createOffer ''Create offer''; description: ''lets partners
+    create embedded insurance offers (quotes) at the point of sale'' (schemas Offer, Quote)'
+  reason: Creation of embedded insurance quotes/offers at partner point of sale, with opt-out — quote
+    generation and conversion into bind within a distribution channel.
