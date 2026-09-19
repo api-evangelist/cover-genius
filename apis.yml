@@ -70,6 +70,8 @@ apis:
   humanURL: https://partner-docs.covergenius.com/offers/api/reference
   baseURL: https://api.xcover.com/x
   tags:
+  - Booking
+  tags_raw:
   - Bookings
   properties:
   - type: OpenAPI
