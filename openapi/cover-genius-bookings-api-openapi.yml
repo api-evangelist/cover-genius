@@ -1,4 +1,4 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
   title: Cover Genius XCover Bookings API
   description: The XCover distribution API from Cover Genius lets partners create embedded insurance offers (quotes) at the point of sale, confirm them into bound policies (bookings), retrieve and modify bookings, and cancel them. Requests are authenticated with an HTTP Signature (HMAC) scheme using an X-Api-Key header, a Date header, and an Authorization signature header. This document models the documented XCover Offers and Bookings surface served from https://api.xcover.com/x.
@@ -164,7 +164,47 @@ paths:
         '400':
           $ref: '#/components/responses/Error'
 components:
+  parameters:
+    PartnerCode:
+      name: partner_code
+      in: path
+      required: true
+      schema:
+        type: string
+      description: The partner's unique XCover partner code (e.g. LLODT).
+    BookingId:
+      name: booking_id
+      in: path
+      required: true
+      schema:
+        type: string
+      description: Identifier of a confirmed booking.
+    OfferId:
+      name: offer_id
+      in: path
+      required: true
+      schema:
+        type: string
+      description: Identifier of an offer returned by createOffer.
+  responses:
+    Error:
+      description: Error response.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
+    UpdatePreview:
+      type: object
+      properties:
+        update_id:
+          type: string
+        price_difference:
+          type: string
+        price_difference_formatted:
+          type: string
+        currency:
+          type: string
     Policyholder:
       type: object
       required:
@@ -185,17 +225,6 @@ components:
           type: string
         age:
           type: integer
-    UpdatePreview:
-      type: object
-      properties:
-        update_id:
-          type: string
-        price_difference:
-          type: string
-        price_difference_formatted:
-          type: string
-        currency:
-          type: string
     ModifyBookingRequest:
       type: object
       properties:
@@ -211,14 +240,6 @@ components:
                 format: date-time
               fields:
                 type: object
-    CancelBookingRequest:
-      type: object
-      properties:
-        preview:
-          type: boolean
-          description: When true, returns a cancellation preview without cancelling.
-        cancellation_reason:
-          type: string
     Booking:
       type: object
       properties:
@@ -233,28 +254,6 @@ components:
         policyholder:
           $ref: '#/components/schemas/Policyholder'
         partner_transaction_id:
-          type: string
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-        message:
-          type: string
-        details:
-          type: array
-          items:
-            type: object
-    CancellationResult:
-      type: object
-      properties:
-        cancellation_id:
-          type: string
-        refund_amount:
-          type: string
-        refund_amount_formatted:
-          type: string
-        status:
           type: string
     Quote:
       type: object
@@ -288,35 +287,36 @@ components:
           type: string
         payment_details:
           type: object
-  parameters:
-    OfferId:
-      name: offer_id
-      in: path
-      required: true
-      schema:
-        type: string
-      description: Identifier of an offer returned by createOffer.
-    BookingId:
-      name: booking_id
-      in: path
-      required: true
-      schema:
-        type: string
-      description: Identifier of a confirmed booking.
-    PartnerCode:
-      name: partner_code
-      in: path
-      required: true
-      schema:
-        type: string
-      description: The partner's unique XCover partner code (e.g. LLODT).
-  responses:
+    CancellationResult:
+      type: object
+      properties:
+        cancellation_id:
+          type: string
+        refund_amount:
+          type: string
+        refund_amount_formatted:
+          type: string
+        status:
+          type: string
+    CancelBookingRequest:
+      type: object
+      properties:
+        preview:
+          type: boolean
+          description: When true, returns a cancellation preview without cancelling.
+        cancellation_reason:
+          type: string
     Error:
-      description: Error response.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
   securitySchemes:
     XCoverSignature:
       type: apiKey
