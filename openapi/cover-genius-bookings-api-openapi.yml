@@ -164,6 +164,130 @@ paths:
         '400':
           $ref: '#/components/responses/Error'
 components:
+  schemas:
+    ModifyBookingRequest:
+      type: object
+      properties:
+        quotes:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              policy_start_date:
+                type: string
+                format: date-time
+              fields:
+                type: object
+    CancelBookingRequest:
+      type: object
+      properties:
+        preview:
+          type: boolean
+          description: When true, returns a cancellation preview without cancelling.
+        cancellation_reason:
+          type: string
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+    ConfirmOfferRequest:
+      type: object
+      required:
+      - quotes
+      - policyholder
+      properties:
+        quotes:
+          type: array
+          description: Quote IDs from the offer to bind into policies.
+          items:
+            type: string
+        policyholder:
+          $ref: '#/components/schemas/Policyholder'
+        partner_transaction_id:
+          type: string
+        payment_details:
+          type: object
+    UpdatePreview:
+      type: object
+      properties:
+        update_id:
+          type: string
+        price_difference:
+          type: string
+        price_difference_formatted:
+          type: string
+        currency:
+          type: string
+    Booking:
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+        policies:
+          type: array
+          items:
+            $ref: '#/components/schemas/Quote'
+        policyholder:
+          $ref: '#/components/schemas/Policyholder'
+        partner_transaction_id:
+          type: string
+    CancellationResult:
+      type: object
+      properties:
+        cancellation_id:
+          type: string
+        refund_amount:
+          type: string
+        refund_amount_formatted:
+          type: string
+        status:
+          type: string
+    Quote:
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+          description: Quote/policy status (e.g. QUOTED, RECEIVED, CONFIRMED, CANCELLED).
+        price:
+          type: string
+        currency:
+          type: string
+        policy_start_date:
+          type: string
+          format: date-time
+    Policyholder:
+      type: object
+      required:
+      - first_name
+      - last_name
+      - email
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+        country:
+          type: string
+        age:
+          type: integer
   parameters:
     PartnerCode:
       name: partner_code
@@ -193,130 +317,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-  schemas:
-    UpdatePreview:
-      type: object
-      properties:
-        update_id:
-          type: string
-        price_difference:
-          type: string
-        price_difference_formatted:
-          type: string
-        currency:
-          type: string
-    Policyholder:
-      type: object
-      required:
-      - first_name
-      - last_name
-      - email
-      properties:
-        first_name:
-          type: string
-        last_name:
-          type: string
-        email:
-          type: string
-          format: email
-        phone:
-          type: string
-        country:
-          type: string
-        age:
-          type: integer
-    ModifyBookingRequest:
-      type: object
-      properties:
-        quotes:
-          type: array
-          items:
-            type: object
-            properties:
-              id:
-                type: string
-              policy_start_date:
-                type: string
-                format: date-time
-              fields:
-                type: object
-    Booking:
-      type: object
-      properties:
-        id:
-          type: string
-        status:
-          type: string
-        policies:
-          type: array
-          items:
-            $ref: '#/components/schemas/Quote'
-        policyholder:
-          $ref: '#/components/schemas/Policyholder'
-        partner_transaction_id:
-          type: string
-    Quote:
-      type: object
-      properties:
-        id:
-          type: string
-        status:
-          type: string
-          description: Quote/policy status (e.g. QUOTED, RECEIVED, CONFIRMED, CANCELLED).
-        price:
-          type: string
-        currency:
-          type: string
-        policy_start_date:
-          type: string
-          format: date-time
-    ConfirmOfferRequest:
-      type: object
-      required:
-      - quotes
-      - policyholder
-      properties:
-        quotes:
-          type: array
-          description: Quote IDs from the offer to bind into policies.
-          items:
-            type: string
-        policyholder:
-          $ref: '#/components/schemas/Policyholder'
-        partner_transaction_id:
-          type: string
-        payment_details:
-          type: object
-    CancellationResult:
-      type: object
-      properties:
-        cancellation_id:
-          type: string
-        refund_amount:
-          type: string
-        refund_amount_formatted:
-          type: string
-        status:
-          type: string
-    CancelBookingRequest:
-      type: object
-      properties:
-        preview:
-          type: boolean
-          description: When true, returns a cancellation preview without cancelling.
-        cancellation_reason:
-          type: string
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-        message:
-          type: string
-        details:
-          type: array
-          items:
-            type: object
   securitySchemes:
     XCoverSignature:
       type: apiKey

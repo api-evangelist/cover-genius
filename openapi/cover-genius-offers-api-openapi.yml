@@ -71,6 +71,23 @@ paths:
           $ref: '#/components/responses/Error'
 components:
   schemas:
+    Offer:
+      type: object
+      properties:
+        id:
+          type: string
+        quotes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Quote'
+        total_price:
+          type: string
+        total_price_formatted:
+          type: string
+        currency:
+          type: string
+        pds_url:
+          type: string
     CreateOfferRequest:
       type: object
       required:
@@ -104,6 +121,17 @@ components:
               example: en
             customer_region:
               type: string
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
     Quote:
       type: object
       properties:
@@ -119,34 +147,6 @@ components:
         policy_start_date:
           type: string
           format: date-time
-    Offer:
-      type: object
-      properties:
-        id:
-          type: string
-        quotes:
-          type: array
-          items:
-            $ref: '#/components/schemas/Quote'
-        total_price:
-          type: string
-        total_price_formatted:
-          type: string
-        currency:
-          type: string
-        pds_url:
-          type: string
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-        message:
-          type: string
-        details:
-          type: array
-          items:
-            type: object
   parameters:
     PartnerCode:
       name: partner_code
