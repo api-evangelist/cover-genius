@@ -165,6 +165,49 @@ paths:
           $ref: '#/components/responses/Error'
 components:
   schemas:
+    Quote:
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+          description: Quote/policy status (e.g. QUOTED, RECEIVED, CONFIRMED, CANCELLED).
+        price:
+          type: string
+        currency:
+          type: string
+        policy_start_date:
+          type: string
+          format: date-time
+    CancelBookingRequest:
+      type: object
+      properties:
+        preview:
+          type: boolean
+          description: When true, returns a cancellation preview without cancelling.
+        cancellation_reason:
+          type: string
+    Policyholder:
+      type: object
+      required:
+      - first_name
+      - last_name
+      - email
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+        country:
+          type: string
+        age:
+          type: integer
     ModifyBookingRequest:
       type: object
       properties:
@@ -180,25 +223,6 @@ components:
                 format: date-time
               fields:
                 type: object
-    CancelBookingRequest:
-      type: object
-      properties:
-        preview:
-          type: boolean
-          description: When true, returns a cancellation preview without cancelling.
-        cancellation_reason:
-          type: string
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-        message:
-          type: string
-        details:
-          type: array
-          items:
-            type: object
     ConfirmOfferRequest:
       type: object
       required:
@@ -227,6 +251,17 @@ components:
           type: string
         currency:
           type: string
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
     Booking:
       type: object
       properties:
@@ -253,49 +288,7 @@ components:
           type: string
         status:
           type: string
-    Quote:
-      type: object
-      properties:
-        id:
-          type: string
-        status:
-          type: string
-          description: Quote/policy status (e.g. QUOTED, RECEIVED, CONFIRMED, CANCELLED).
-        price:
-          type: string
-        currency:
-          type: string
-        policy_start_date:
-          type: string
-          format: date-time
-    Policyholder:
-      type: object
-      required:
-      - first_name
-      - last_name
-      - email
-      properties:
-        first_name:
-          type: string
-        last_name:
-          type: string
-        email:
-          type: string
-          format: email
-        phone:
-          type: string
-        country:
-          type: string
-        age:
-          type: integer
   parameters:
-    PartnerCode:
-      name: partner_code
-      in: path
-      required: true
-      schema:
-        type: string
-      description: The partner's unique XCover partner code (e.g. LLODT).
     BookingId:
       name: booking_id
       in: path
@@ -310,6 +303,13 @@ components:
       schema:
         type: string
       description: Identifier of an offer returned by createOffer.
+    PartnerCode:
+      name: partner_code
+      in: path
+      required: true
+      schema:
+        type: string
+      description: The partner's unique XCover partner code (e.g. LLODT).
   responses:
     Error:
       description: Error response.

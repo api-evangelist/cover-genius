@@ -71,23 +71,21 @@ paths:
           $ref: '#/components/responses/Error'
 components:
   schemas:
-    Offer:
+    Quote:
       type: object
       properties:
         id:
           type: string
-        quotes:
-          type: array
-          items:
-            $ref: '#/components/schemas/Quote'
-        total_price:
+        status:
           type: string
-        total_price_formatted:
+          description: Quote/policy status (e.g. QUOTED, RECEIVED, CONFIRMED, CANCELLED).
+        price:
           type: string
         currency:
           type: string
-        pds_url:
+        policy_start_date:
           type: string
+          format: date-time
     CreateOfferRequest:
       type: object
       required:
@@ -132,36 +130,23 @@ components:
           type: array
           items:
             type: object
-    Quote:
+    Offer:
       type: object
       properties:
         id:
           type: string
-        status:
+        quotes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Quote'
+        total_price:
           type: string
-          description: Quote/policy status (e.g. QUOTED, RECEIVED, CONFIRMED, CANCELLED).
-        price:
+        total_price_formatted:
           type: string
         currency:
           type: string
-        policy_start_date:
+        pds_url:
           type: string
-          format: date-time
-  parameters:
-    PartnerCode:
-      name: partner_code
-      in: path
-      required: true
-      schema:
-        type: string
-      description: The partner's unique XCover partner code (e.g. LLODT).
-    OfferId:
-      name: offer_id
-      in: path
-      required: true
-      schema:
-        type: string
-      description: Identifier of an offer returned by createOffer.
   responses:
     Error:
       description: Error response.
@@ -169,6 +154,21 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+  parameters:
+    OfferId:
+      name: offer_id
+      in: path
+      required: true
+      schema:
+        type: string
+      description: Identifier of an offer returned by createOffer.
+    PartnerCode:
+      name: partner_code
+      in: path
+      required: true
+      schema:
+        type: string
+      description: The partner's unique XCover partner code (e.g. LLODT).
   securitySchemes:
     XCoverSignature:
       type: apiKey
