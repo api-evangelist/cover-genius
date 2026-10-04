@@ -165,6 +165,26 @@ paths:
           $ref: '#/components/responses/Error'
 components:
   schemas:
+    Policyholder:
+      type: object
+      required:
+      - first_name
+      - last_name
+      - email
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+        country:
+          type: string
+        age:
+          type: integer
     Quote:
       type: object
       properties:
@@ -188,26 +208,17 @@ components:
           description: When true, returns a cancellation preview without cancelling.
         cancellation_reason:
           type: string
-    Policyholder:
+    UpdatePreview:
       type: object
-      required:
-      - first_name
-      - last_name
-      - email
       properties:
-        first_name:
+        update_id:
           type: string
-        last_name:
+        price_difference:
           type: string
-        email:
+        price_difference_formatted:
           type: string
-          format: email
-        phone:
+        currency:
           type: string
-        country:
-          type: string
-        age:
-          type: integer
     ModifyBookingRequest:
       type: object
       properties:
@@ -223,6 +234,43 @@ components:
                 format: date-time
               fields:
                 type: object
+    CancellationResult:
+      type: object
+      properties:
+        cancellation_id:
+          type: string
+        refund_amount:
+          type: string
+        refund_amount_formatted:
+          type: string
+        status:
+          type: string
+    Booking:
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+        policies:
+          type: array
+          items:
+            $ref: '#/components/schemas/Quote'
+        policyholder:
+          $ref: '#/components/schemas/Policyholder'
+        partner_transaction_id:
+          type: string
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
     ConfirmOfferRequest:
       type: object
       required:
@@ -240,55 +288,21 @@ components:
           type: string
         payment_details:
           type: object
-    UpdatePreview:
-      type: object
-      properties:
-        update_id:
-          type: string
-        price_difference:
-          type: string
-        price_difference_formatted:
-          type: string
-        currency:
-          type: string
+  responses:
     Error:
-      type: object
-      properties:
-        error:
-          type: string
-        message:
-          type: string
-        details:
-          type: array
-          items:
-            type: object
-    Booking:
-      type: object
-      properties:
-        id:
-          type: string
-        status:
-          type: string
-        policies:
-          type: array
-          items:
-            $ref: '#/components/schemas/Quote'
-        policyholder:
-          $ref: '#/components/schemas/Policyholder'
-        partner_transaction_id:
-          type: string
-    CancellationResult:
-      type: object
-      properties:
-        cancellation_id:
-          type: string
-        refund_amount:
-          type: string
-        refund_amount_formatted:
-          type: string
-        status:
-          type: string
+      description: Error response.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   parameters:
+    PartnerCode:
+      name: partner_code
+      in: path
+      required: true
+      schema:
+        type: string
+      description: The partner's unique XCover partner code (e.g. LLODT).
     BookingId:
       name: booking_id
       in: path
@@ -303,20 +317,6 @@ components:
       schema:
         type: string
       description: Identifier of an offer returned by createOffer.
-    PartnerCode:
-      name: partner_code
-      in: path
-      required: true
-      schema:
-        type: string
-      description: The partner's unique XCover partner code (e.g. LLODT).
-  responses:
-    Error:
-      description: Error response.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   securitySchemes:
     XCoverSignature:
       type: apiKey
